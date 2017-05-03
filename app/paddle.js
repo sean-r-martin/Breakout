@@ -19,25 +19,26 @@ class Paddle {
 
   draw() {
     this.ctx.beginPath();
-    this.ctx.rect(this.xAxis, this.canvas.height - this.height, this.width, this.height);
+    const yAxis = this.canvas.height - this.height;
+    this.ctx.rect(this.xAxis, yAxis, this.width, this.height);
     this.ctx.fillStyle = "0095DD";
     this.ctx.fill()
     this.ctx.closePath();
   }
 
   keyDownHandler(event) {
-    if(event.keyCode == 39) {
+    if(event.keyCode === 39) {
       this.rightPressed = true;
-    } else if (event.keyCode == 37) {
+    } else if (event.keyCode === 37) {
       this.leftPressed = true;
     }
   }
 
   keyUpHandler(event) {
-    if(event.keyCode == 39) {
+    if(event.keyCode === 39) {
       this.rightPressed = false;
     }
-    else if (event.keyCode == 37) {
+    else if (event.keyCode === 37) {
       this.leftPressed = false;
     }
   }
@@ -49,7 +50,7 @@ class Paddle {
     }
   }
 
-  checkPosition() {
+  move() {
     if (this.rightPressed && this.xAxis < this.canvas.width - this.width) {
       this.xAxis += 7;
     } else if (this.leftPressed && this.xAxis > 0) {
