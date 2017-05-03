@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './app/root.js',
+  entry: './app/game.js',
   output: {
     path: __dirname,
     filename: './public/bundle.js'
@@ -12,7 +12,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         options: {
-          presets: ['react', 'es2015']
+          presets: ['es2015']
         }
       }
     ]

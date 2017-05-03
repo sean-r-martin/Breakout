@@ -1,14 +1,11 @@
 html {
-  box-sizing: border-box;
-}
+  box-sizing: border-box; }
 
 * {
   padding: 0;
-  margin: 0;
-}
+  margin: 0; }
 
 canvas {
   background: #eee;
   display: block;
-  margin: 0 auto;
-}
+  margin: 0 auto; }

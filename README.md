@@ -1,4 +1,4 @@
-# React Boilerplate code
+# Breakout
 
 #### Purpose:
-* boilerplate code for future React projects.
+* A web based version of the classic Breakout game.
