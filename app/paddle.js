@@ -5,7 +5,7 @@ class Paddle {
     this.canvas = canvas;
     this.ctx = ctx;
     this.height = 10;
-    this.width = 75;
+    this.width = 70;
     this.xAxis = (this.canvas.width - this.width) / 2;
     this.rightPressed = false;
     this.leftPressed = false;
@@ -19,9 +19,9 @@ class Paddle {
 
   draw() {
     this.ctx.beginPath();
-    const yAxis = this.canvas.height - this.height;
+    const yAxis = this.canvas.height - (this.height * 2);
     this.ctx.rect(this.xAxis, yAxis, this.width, this.height);
-    this.ctx.fillStyle = "0095DD";
+    this.ctx.fillStyle = "black";
     this.ctx.fill()
     this.ctx.closePath();
   }

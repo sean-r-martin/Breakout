@@ -1,5 +1,6 @@
 html {
   box-sizing: border-box;
+  background-image: url("../brick-wall.jpg");
 }
 
 * {
@@ -8,7 +9,11 @@ html {
 }
 
 canvas {
-  background: #eee;
+  background-image: url("../old-wall.jpg");
   display: block;
   margin: 0 auto;
+}
+
+#title {
+  font-size: 40px;
 }

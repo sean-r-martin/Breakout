@@ -6,19 +6,20 @@ class Ball {
     this.ctx = ctx;
     this.x = this.canvas.width / 2;
     this.y = this.canvas.height - 30;
-    this.xStep = 2;
-    this.yStep = -2;
+    this.xSpeed = 3;
+    this.ySpeed = -3;
     this.radius = 10;
   }
 
   draw() {
+    const redOrange = "#fd2c03"
     this.ctx.beginPath();
     this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
-    this.ctx.fillStyle = "#0095DD";
+    this.ctx.fillStyle = redOrange;
     this.ctx.fill();
     this.ctx.closePath();
-    this.x += this.xStep;
-    this.y += this.yStep;
+    this.x += this.xSpeed;
+    this.y += this.ySpeed;
   }
 
 }

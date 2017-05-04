@@ -30,13 +30,13 @@ class Game {
 
   drawScore(score, ctx) {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "darkblue";
     ctx.fillText("Score: " + score, 8, 20);
   }
 
   drawLives(lives, ctx, canvas) {
     ctx.font = "16px Arial";
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "darkblue";
     ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
   }
 
@@ -55,21 +55,19 @@ class Game {
 
   wallCollisionDetection(ball, paddle, canvas) {
     if (this._ballHitSideWall(ball, canvas)) {
-      ball.xStep = -ball.xStep;
+      ball.xSpeed = -ball.xSpeed;
+    }
+    if(this._ballHitPaddle(ball, paddle, canvas)) {
+      ball.ySpeed = -ball.ySpeed;
     }
     if (this._ballHitCeiling(ball)) {
-      ball.yStep = -ball.yStep;
+      ball.ySpeed = -ball.ySpeed;
     } else if (this._ballHitFloor(ball, canvas)) {
-      if(this._ballHitPaddle(ball, paddle)) {
-        ball.yStep = -ball.yStep;
+      if(this.lives--) {
+        this._resetPaddle(ball, paddle, canvas);
       } else {
-        this.lives--;
-        if(this.lives) {
-          this._resetPaddle(ball, paddle, canvas);
-        } else {
-          alert("Game Over");
-          document.location.reload();
-        }
+        alert("Game Over");
+        document.location.reload();
       }
     }
   }
@@ -81,39 +79,53 @@ class Game {
   }
 
   _destroyBrick(brick, ball) {
-    const rowCount = this.bricks.rowCount;
-    const columnCount = this.bricks.columnCount;
-
-    ball.yStep = -ball.yStep;
+    ball.ySpeed = -ball.ySpeed;
     brick.destroyed = true;
     this.score++;
+    this._victoryStatus();
+    this._increaseSpeed(ball);
+  }
+
+  _victoryStatus() {
+    const rowCount = this.bricks.rowCount;
+    const columnCount = this.bricks.columnCount;
     if(this.score === (rowCount * columnCount)) {
       alert("YOU WIN, CONGRATULATIONS!");
       document.location.reload();
     }
   }
 
+  _increaseSpeed(ball) {
+    if (this.score % 7 === 0) {
+      const increase = 0.5;
+      const xIncrease = ball.xSpeed > 0 ? increase : -increase;
+      const yIncrease = ball.ySpeed > 0 ? increase : -increase;
+      ball.xSpeed += xIncrease;
+      ball.ySpeed += yIncrease;
+    }
+  }
+
   _ballHitSideWall(ball, canvas) {
-    return (ball.x + ball.xStep) < ball.radius || (ball.x + ball.xStep) > (canvas.width - ball.radius)
+    return (ball.x + ball.xSpeed) < ball.radius || (ball.x + ball.xSpeed) > (canvas.width - ball.radius)
   }
 
   _ballHitCeiling(ball) {
-    return (ball.y + ball.yStep) < ball.radius;
+    return (ball.y + ball.ySpeed) < ball.radius;
   }
 
   _ballHitFloor(ball, canvas) {
-    return (ball.y + ball.yStep) > (canvas.height - ball.radius);
+    return (ball.y + ball.ySpeed) > (canvas.height - ball.radius);
   }
 
-  _ballHitPaddle(ball, paddle) {
-    return (ball.x > paddle.xAxis) && ball.x < (paddle.xAxis + paddle.width);
+  _ballHitPaddle(ball, paddle, canvas) {
+    const matchYAxis = (ball.y + ball.ySpeed) > (canvas.height - (paddle.height * 2) - ball.radius);
+    const matchXAxis = (ball.x > paddle.xAxis) && ball.x < (paddle.xAxis + paddle.width);
+    return matchXAxis && matchYAxis;
   }
 
   _resetPaddle(ball, paddle, canvas) {
     ball.x = canvas.width / 2;
     ball.y = canvas.height - 30;
-    ball.xStep = 2;
-    ball.yStep = -2;
     paddle.xAxis = (canvas.width - paddle.width) / 2;
   }
 
