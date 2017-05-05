@@ -6,10 +6,11 @@ import Bricks from './bricks.js';
 
 class Game {
   constructor() {
-    this.canvas = document.getElementById("myCanvas");
+    this.canvas = $("#myCanvas").get(0);
     this.ctx = this.canvas.getContext("2d");
     this.score = 0;
     this.lives = 3;
+    this.status = 'active';
     this.paddle = new Paddle(this.canvas, this.ctx);
     this.ball = new Ball(this.canvas, this.ctx);
     this.bricks = new Bricks(this.canvas, this.ctx);
@@ -25,19 +26,21 @@ class Game {
     this.drawLives(this.lives, this.ctx, this.canvas);
     this.wallCollisionDetection(this.ball, this.paddle, this.canvas);
     this.brickCollisionDetection(this.bricks, this.ball);
-    requestAnimationFrame(this.draw.bind(this));
+    if (this.status === 'active') {
+      requestAnimationFrame(this.draw.bind(this));
+    }
   }
 
   drawScore(score, ctx) {
-    ctx.font = "16px Arial";
+    ctx.font = "20px wallpoet";
     ctx.fillStyle = "darkblue";
     ctx.fillText("Score: " + score, 8, 20);
   }
 
   drawLives(lives, ctx, canvas) {
-    ctx.font = "16px Arial";
+    ctx.font = "20px wallpoet";
     ctx.fillStyle = "darkblue";
-    ctx.fillText("Lives: " + lives, canvas.width - 65, 20);
+    ctx.fillText("Lives: " + lives, canvas.width - 100, 20);
   }
 
   brickCollisionDetection(bricks, ball) {

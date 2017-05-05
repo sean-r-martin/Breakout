@@ -12,9 +12,9 @@ class Paddle {
     this.keyDownHandler = this.keyDownHandler.bind(this);
     this.keyUpHandler = this.keyUpHandler.bind(this);
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
-    document.addEventListener("keydown", this.keyDownHandler, false);
-    document.addEventListener("keyup", this.keyUpHandler, false);
-    document.addEventListener("mousemove", this.mouseMoveHandler, false)
+    $(document).keydown(this.keyDownHandler);
+    $(document).keyup(this.keyUpHandler);
+    $(document).mousemove(this.mouseMoveHandler);
   }
 
   draw() {

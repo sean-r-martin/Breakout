@@ -1,7 +1,7 @@
 {
-  "name": "breakout",
+  "name": "brick-buster",
   "version": "1.0.0",
-  "description": "Breakout",
+  "description": "web application game based on the classic game breakout",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
