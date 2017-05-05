@@ -8,8 +8,8 @@
     "start": "check-node-version --node '>= 6.7.0' && nodemon server/start.js",
     "build": "check-node-version --node '>= 6.7.0' && webpack",
     "build-watch": "check-node-version --node '>= 6.7.0' && webpack -w",
-    "build-css": "node-sass public/stylesheets/style.scss -o public/stylesheets",
-    "build-watch-css": "node-sass -w public/stylesheets/style.scss -o public/stylesheets"
+    "build-css": "node-sass docs/stylesheets/style.scss -o docs/stylesheets",
+    "build-watch-css": "node-sass -w docs/stylesheets/style.scss -o docs/stylesheets"
   },
   "repository": {
     "type": "git",

@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  background-image: url("../brick-wall.jpg"); }
+  background-image: url("../img/brick-wall.jpg"); }
 
 body {
   height: 100vh;
@@ -11,7 +11,7 @@ body {
   margin: 0; }
 
 canvas {
-  background-image: url("../old-wall.jpg");
+  background-image: url("../img/old-wall.jpg");
   display: block;
   margin: 0 auto; }
 
