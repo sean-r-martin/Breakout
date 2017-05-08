@@ -1,54 +1,49 @@
 'use strict';
 import Game from './game.js';
 let game = new Game();
+const startButton = $('#start-button');
+const resumeButton = $('#resume-button');
+const restartButton = $('#restart-button');
 
-function pauseGame() {
-  if ($('#start-button').text()) {
-    return null;
-  }
-  game.status = 'paused';
-  if($('#resume-button').text() !== 'Resume Game') {
-    createResumeButton();
-    createRestartButton();
-  }
-}
+startButton.show();
 
 function startGame() {
+  game.setupCanvas();
   game.bricks.createBricks();
   game.draw();
   $('#start-button').remove();
 }
 
-function createResumeButton() {
-  const resumeButton = $('<p id="resume-button" class="button"></p>').text('Resume Game');
-  $('#buttons').append(resumeButton);
-  resumeListener(resumeButton);
+function pauseGame() {
+  if ($('#start-button').text()) {
+    return null;
+  } else {
+    game.status = 'paused';
+    resumeButton.show();
+    restartButton.show();
+  }
 }
 
-function resumeListener(button) {
-  button.click(function () {
-    $('#resume-button').remove();
-    $('#restart-button').remove();
-    game.status = 'active';
-    game.draw();
-  })
+function resumeGame() {
+  $('#resume-button').hide();
+  $('#restart-button').hide();
+  game.status = 'active';
+  game.draw();
 }
 
-function createRestartButton() {
-  const restartButton = $('<p id="restart-button" class="button"></p>').text('Restart Game');
-  $('#buttons').append(restartButton);
-  restartListener(restartButton);
+function restartGame() {
+  $('#resume-button').hide();
+  $('#restart-button').hide();
+  $('#victory-msg').hide();
+  $('#gameover-msg').hide();
+  $(document).keypress(pauseGame);
+  game = new Game();
+  game.setupCanvas();
+  game.bricks.createBricks();
+  game.draw();
 }
 
-function restartListener(button) {
-  button.click(function () {
-    $('#resume-button').remove();
-    $('#restart-button').remove();
-    game = new Game();
-    game.bricks.createBricks();
-    game.draw();
-  })
-}
-
-$('#start-button').click(startGame);
+startButton.click(startGame);
+resumeButton.click(resumeGame);
+restartButton.click(restartGame);
 $(document).keypress(pauseGame);

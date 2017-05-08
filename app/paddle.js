@@ -1,12 +1,12 @@
 'use strict';
 
 class Paddle {
-  constructor(canvas, ctx) {
+  constructor(canvas, ctx, placement) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.height = 10;
     this.width = 70;
-    this.xAxis = (this.canvas.width - this.width) / 2;
+    this.xAxis = ((this.canvas.width - this.width) / 2) + placement;
     this.rightPressed = false;
     this.leftPressed = false;
     this.keyDownHandler = this.keyDownHandler.bind(this);

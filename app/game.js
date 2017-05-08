@@ -11,9 +11,23 @@ class Game {
     this.score = 0;
     this.lives = 3;
     this.status = 'active';
-    this.paddle = new Paddle(this.canvas, this.ctx);
-    this.ball = new Ball(this.canvas, this.ctx);
+    this.placement = this.randomPlacement();
+    this.paddle = new Paddle(this.canvas, this.ctx, this.placement);
+    this.ball = new Ball(this.canvas, this.ctx, this.placement);
     this.bricks = new Bricks(this.canvas, this.ctx);
+  }
+
+  randomPlacement() {
+    const sign = Math.random() >= 0.5 ? 1 : -1;
+    return (Math.random() * 150) * sign;
+  }
+
+  setupCanvas() {
+    const darkGray = '#2c2c2c';
+    this.ctx.shadowColor = darkGray;
+    this.ctx.shadowBlur = 5;
+    this.ctx.shadowOffsetX = 5;
+    this.ctx.shadowOffsetY = 5;
   }
 
   draw() {
@@ -32,15 +46,15 @@ class Game {
   }
 
   drawScore(score, ctx) {
-    ctx.font = "20px wallpoet";
+    ctx.font = "23px wallpoet";
     ctx.fillStyle = "darkblue";
-    ctx.fillText("Score: " + score, 8, 20);
+    ctx.fillText("Score: " + score, 15, 20);
   }
 
   drawLives(lives, ctx, canvas) {
-    ctx.font = "20px wallpoet";
+    ctx.font = "23px wallpoet";
     ctx.fillStyle = "darkblue";
-    ctx.fillText("Lives: " + lives, canvas.width - 100, 20);
+    ctx.fillText("Lives: " + lives, canvas.width - 120, 20);
   }
 
   brickCollisionDetection(bricks, ball) {
@@ -69,8 +83,11 @@ class Game {
       if(this.lives--) {
         this._resetPaddle(ball, paddle, canvas);
       } else {
-        alert("Game Over");
-        document.location.reload();
+        this.status = 'paused';
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        $('#gameover-msg').show();
+        $('#restart-button').show();
+        $(document).unbind("keypress");
       }
     }
   }
@@ -93,8 +110,11 @@ class Game {
     const rowCount = this.bricks.rowCount;
     const columnCount = this.bricks.columnCount;
     if(this.score === (rowCount * columnCount)) {
-      alert("YOU WIN, CONGRATULATIONS!");
-      document.location.reload();
+      this.status = 'paused';
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      $('#victory-msg').show();
+      $('#restart-button').show();
+      $(document).unbind("keypress");
     }
   }
 
@@ -127,9 +147,12 @@ class Game {
   }
 
   _resetPaddle(ball, paddle, canvas) {
-    ball.x = canvas.width / 2;
+    const placement = this.randomPlacement();
+    ball.x = (canvas.width / 2) + placement;
     ball.y = canvas.height - 30;
-    paddle.xAxis = (canvas.width - paddle.width) / 2;
+    ball.xSpeed = Math.abs(ball.xSpeed);
+    ball.ySpeed = Math.abs(ball.ySpeed) * -1;
+    paddle.xAxis = ((canvas.width - paddle.width) / 2) + placement;
   }
 
 }

@@ -1,6 +1,7 @@
 html {
   box-sizing: border-box;
-  background-image: url("../img/brick-wall.jpg"); }
+  background-image: url("../img/brick-wall.jpg");
+  font-family: 'Wallpoet', cursive; }
 
 body {
   height: 100vh;
@@ -10,25 +11,29 @@ body {
   padding: 0;
   margin: 0; }
 
+#title {
+  font-size: 60px;
+  margin: 30px auto;
+  color: #da680f;
+  text-shadow: 3px 3px black; }
+
 canvas {
   background-image: url("../img/old-wall.jpg");
   display: block;
   margin: 0 auto; }
 
-footer {
-  position: absolute;
-  bottom: 20px;
-  font-family: 'Wallpoet';
-  font-size: 18px;
+#instructions {
+  font-family: Helvetica;
   color: #da680f;
-  text-shadow: 2px 2px black; }
-
-#title {
-  font-size: 60px;
-  margin: 30px auto;
-  color: #da680f;
-  text-shadow: 3px 3px black;
-  font-family: 'Wallpoet'; }
+  background-color: black;
+  width: 480px;
+  list-style: none;
+  margin: 20px auto 0 auto;
+  text-align: left;
+  border: 3px solid #da680f;
+  padding: 5px; }
+  #instructions li {
+    margin: 5px; }
 
 #buttons {
   display: flex;
@@ -38,15 +43,36 @@ footer {
   width: 300px; }
 
 .button {
-  font-family: 'Wallpoet';
   font-size: 23px;
   padding: 10px;
   width: 230px;
-  border-style: solid;
-  border-color: #da680f;
+  border: 3px solid #da680f;
   background-color: black;
-  color: #da680f; }
+  color: #da680f;
+  display: none;
+  margin: 5px 0; }
   .button:hover {
     text-decoration: none;
     background-color: #da680f;
     color: black; }
+
+.msg {
+  position: absolute;
+  top: 260px;
+  font-size: 60px;
+  display: none; }
+  .msg#victory-msg {
+    color: green;
+    width: 300px;
+    right: calc(50vw - 150px); }
+  .msg#gameover-msg {
+    color: red;
+    width: 400px;
+    right: calc(50vw - 200px); }
+
+footer {
+  position: absolute;
+  bottom: 20px;
+  font-size: 18px;
+  color: #da680f;
+  text-shadow: 2px 2px black; }

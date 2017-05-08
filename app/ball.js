@@ -1,10 +1,10 @@
 'use strict';
 
 class Ball {
-  constructor(canvas, ctx) {
+  constructor(canvas, ctx, placement) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.x = this.canvas.width / 2;
+    this.x = (this.canvas.width / 2) + placement;
     this.y = this.canvas.height - 30;
     this.xSpeed = 3;
     this.ySpeed = -3;

@@ -100,12 +100,28 @@ var Game = function () {
     this.score = 0;
     this.lives = 3;
     this.status = 'active';
-    this.paddle = new _paddle2.default(this.canvas, this.ctx);
-    this.ball = new _ball2.default(this.canvas, this.ctx);
+    this.placement = this.randomPlacement();
+    this.paddle = new _paddle2.default(this.canvas, this.ctx, this.placement);
+    this.ball = new _ball2.default(this.canvas, this.ctx, this.placement);
     this.bricks = new _bricks2.default(this.canvas, this.ctx);
   }
 
   _createClass(Game, [{
+    key: 'randomPlacement',
+    value: function randomPlacement() {
+      var sign = Math.random() >= 0.5 ? 1 : -1;
+      return Math.random() * 150 * sign;
+    }
+  }, {
+    key: 'setupCanvas',
+    value: function setupCanvas() {
+      var darkGray = '#2c2c2c';
+      this.ctx.shadowColor = darkGray;
+      this.ctx.shadowBlur = 5;
+      this.ctx.shadowOffsetX = 5;
+      this.ctx.shadowOffsetY = 5;
+    }
+  }, {
     key: 'draw',
     value: function draw() {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -124,16 +140,16 @@ var Game = function () {
   }, {
     key: 'drawScore',
     value: function drawScore(score, ctx) {
-      ctx.font = "20px wallpoet";
+      ctx.font = "23px wallpoet";
       ctx.fillStyle = "darkblue";
-      ctx.fillText("Score: " + score, 8, 20);
+      ctx.fillText("Score: " + score, 15, 20);
     }
   }, {
     key: 'drawLives',
     value: function drawLives(lives, ctx, canvas) {
-      ctx.font = "20px wallpoet";
+      ctx.font = "23px wallpoet";
       ctx.fillStyle = "darkblue";
-      ctx.fillText("Lives: " + lives, canvas.width - 100, 20);
+      ctx.fillText("Lives: " + lives, canvas.width - 120, 20);
     }
   }, {
     key: 'brickCollisionDetection',
@@ -166,8 +182,11 @@ var Game = function () {
         if (this.lives--) {
           this._resetPaddle(ball, paddle, canvas);
         } else {
-          alert("Game Over");
-          document.location.reload();
+          this.status = 'paused';
+          this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+          $('#gameover-msg').show();
+          $('#restart-button').show();
+          $(document).unbind("keypress");
         }
       }
     }
@@ -193,8 +212,11 @@ var Game = function () {
       var rowCount = this.bricks.rowCount;
       var columnCount = this.bricks.columnCount;
       if (this.score === rowCount * columnCount) {
-        alert("YOU WIN, CONGRATULATIONS!");
-        document.location.reload();
+        this.status = 'paused';
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        $('#victory-msg').show();
+        $('#restart-button').show();
+        $(document).unbind("keypress");
       }
     }
   }, {
@@ -233,9 +255,12 @@ var Game = function () {
   }, {
     key: '_resetPaddle',
     value: function _resetPaddle(ball, paddle, canvas) {
-      ball.x = canvas.width / 2;
+      var placement = this.randomPlacement();
+      ball.x = canvas.width / 2 + placement;
       ball.y = canvas.height - 30;
-      paddle.xAxis = (canvas.width - paddle.width) / 2;
+      ball.xSpeed = Math.abs(ball.xSpeed);
+      ball.ySpeed = Math.abs(ball.ySpeed) * -1;
+      paddle.xAxis = (canvas.width - paddle.width) / 2 + placement;
     }
   }]);
 
@@ -256,12 +281,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Ball = function () {
-  function Ball(canvas, ctx) {
+  function Ball(canvas, ctx, placement) {
     _classCallCheck(this, Ball);
 
     this.canvas = canvas;
     this.ctx = ctx;
-    this.x = this.canvas.width / 2;
+    this.x = this.canvas.width / 2 + placement;
     this.y = this.canvas.height - 30;
     this.xSpeed = 3;
     this.ySpeed = -3;
@@ -383,14 +408,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Paddle = function () {
-  function Paddle(canvas, ctx) {
+  function Paddle(canvas, ctx, placement) {
     _classCallCheck(this, Paddle);
 
     this.canvas = canvas;
     this.ctx = ctx;
     this.height = 10;
     this.width = 70;
-    this.xAxis = (this.canvas.width - this.width) / 2;
+    this.xAxis = (this.canvas.width - this.width) / 2 + placement;
     this.rightPressed = false;
     this.leftPressed = false;
     this.keyDownHandler = this.keyDownHandler.bind(this);
@@ -467,56 +492,51 @@ var _game2 = _interopRequireDefault(_game);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var game = new _game2.default();
+var startButton = $('#start-button');
+var resumeButton = $('#resume-button');
+var restartButton = $('#restart-button');
 
-function pauseGame() {
-  if ($('#start-button').text()) {
-    return null;
-  }
-  game.status = 'paused';
-  if ($('#resume-button').text() !== 'Resume Game') {
-    createResumeButton();
-    createRestartButton();
-  }
-}
+startButton.show();
 
 function startGame() {
+  game.setupCanvas();
   game.bricks.createBricks();
   game.draw();
   $('#start-button').remove();
 }
 
-function createResumeButton() {
-  var resumeButton = $('<p id="resume-button" class="button"></p>').text('Resume Game');
-  $('#buttons').append(resumeButton);
-  resumeListener(resumeButton);
+function pauseGame() {
+  if ($('#start-button').text()) {
+    return null;
+  } else {
+    game.status = 'paused';
+    resumeButton.show();
+    restartButton.show();
+  }
 }
 
-function resumeListener(button) {
-  button.click(function () {
-    $('#resume-button').remove();
-    $('#restart-button').remove();
-    game.status = 'active';
-    game.draw();
-  });
+function resumeGame() {
+  $('#resume-button').hide();
+  $('#restart-button').hide();
+  game.status = 'active';
+  game.draw();
 }
 
-function createRestartButton() {
-  var restartButton = $('<p id="restart-button" class="button"></p>').text('Restart Game');
-  $('#buttons').append(restartButton);
-  restartListener(restartButton);
+function restartGame() {
+  $('#resume-button').hide();
+  $('#restart-button').hide();
+  $('#victory-msg').hide();
+  $('#gameover-msg').hide();
+  $(document).keypress(pauseGame);
+  game = new _game2.default();
+  game.setupCanvas();
+  game.bricks.createBricks();
+  game.draw();
 }
 
-function restartListener(button) {
-  button.click(function () {
-    $('#resume-button').remove();
-    $('#restart-button').remove();
-    game = new _game2.default();
-    game.bricks.createBricks();
-    game.draw();
-  });
-}
-
-$('#start-button').click(startGame);
+startButton.click(startGame);
+resumeButton.click(resumeGame);
+restartButton.click(restartGame);
 $(document).keypress(pauseGame);
 
 /***/ })

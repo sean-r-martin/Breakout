@@ -7,13 +7,32 @@
         <link href="https://fonts.googleapis.com/css?family=Wallpoet" rel="stylesheet">
     </head>
     <body>
-        <h1 id="title">Brick Buster</h1>
-        <canvas id="myCanvas" width="610" height="350"></canvas>
-        <div id="buttons">
-            <p id="start-button" class="button">Start Game</p>
-        </div>
+        <header>
+            <h1 id="title">Brick Buster</h1>
+        </header>
+        <main>
+            <section>
+                <canvas id="myCanvas" width="610" height="350"></canvas>
+                <h1 id="victory-msg" class="msg">Victory!</h1>
+                <h1 id="gameover-msg" class="msg">Game Over</h1>
+            </section>
+            <section>
+                <ul id="instructions">
+                    <li><b><u>Instructions</u></b></li>
+                    <li>1) Use the mouse or the left and right arrows to move the paddle.</li>
+                    <li>2) Press any other key to pause the game.</li>
+                </ul>
+            </section>
+            <section id="buttons">
+                <p id="start-button" class="button">Start Game</p>
+                <p id="resume-button" class="button">Resume</p>
+                <p id="restart-button" class="button">Restart</p>
+            </section>
+        </main>
+        <footer>
+            <p>© 2017 Sean Martin</p>
+        </footer>
         <script src="./js/jquery-3.2.1.min.js"></script>
         <script defer src="./bundle.js"></script>
-        <footer>© 2017 Sean Martin</footer>
     </body>
 </html>
