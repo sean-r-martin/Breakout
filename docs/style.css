@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  background-image: url("../img/brick-wall.jpg");
+  background-image: url(4fbe5e326fa650f8719622671cfc5084.jpg);
   font-family: 'Wallpoet', cursive; }
 
 body {
@@ -18,7 +18,7 @@ body {
   text-shadow: 3px 3px black; }
 
 canvas {
-  background-image: url("../img/old-wall.jpg");
+  background-image: url(43d4490675ce0e89e809ede35b0a6150.jpg);
   display: block;
   margin: 0 auto; }
 
@@ -76,3 +76,5 @@ footer {
   font-size: 18px;
   color: #da680f;
   text-shadow: 2px 2px black; }
+
+/*# sourceMappingURL=style.css.map*/

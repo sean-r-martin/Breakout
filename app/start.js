@@ -1,4 +1,6 @@
 'use strict';
+require('../src/style.scss');
+
 import Game from './game.js';
 let game = new Game();
 const startButton = $('#start-button');

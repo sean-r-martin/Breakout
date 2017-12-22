@@ -33,9 +33,6 @@
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -63,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,9 +70,72 @@
 "use strict";
 
 
+var _game = __webpack_require__(1);
+
+var _game2 = _interopRequireDefault(_game);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+__webpack_require__(5);
+
+var game = new _game2.default();
+var startButton = $('#start-button');
+var resumeButton = $('#resume-button');
+var restartButton = $('#restart-button');
+
+startButton.show();
+
+function startGame() {
+  game.setupCanvas();
+  game.bricks.createBricks();
+  game.draw();
+  $('#start-button').remove();
+}
+
+function pauseGame() {
+  if ($('#start-button').text()) {
+    return null;
+  } else {
+    game.status = 'paused';
+    resumeButton.show();
+    restartButton.show();
+  }
+}
+
+function resumeGame() {
+  $('#resume-button').hide();
+  $('#restart-button').hide();
+  game.status = 'active';
+  game.draw();
+}
+
+function restartGame() {
+  $('#resume-button').hide();
+  $('#restart-button').hide();
+  $('#victory-msg').hide();
+  $('#gameover-msg').hide();
+  $(document).keypress(pauseGame);
+  game = new _game2.default();
+  game.setupCanvas();
+  game.bricks.createBricks();
+  game.draw();
+}
+
+startButton.click(startGame);
+resumeButton.click(resumeGame);
+restartButton.click(restartGame);
+$(document).keypress(pauseGame);
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _ball = __webpack_require__(1);
+var _ball = __webpack_require__(2);
 
 var _ball2 = _interopRequireDefault(_ball);
 
@@ -83,7 +143,7 @@ var _paddle = __webpack_require__(3);
 
 var _paddle2 = _interopRequireDefault(_paddle);
 
-var _bricks = __webpack_require__(2);
+var _bricks = __webpack_require__(4);
 
 var _bricks2 = _interopRequireDefault(_bricks);
 
@@ -270,7 +330,7 @@ var Game = function () {
 module.exports = Game;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -311,90 +371,6 @@ var Ball = function () {
 }();
 
 module.exports = Ball;
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Bricks = function () {
-  function Bricks(canvas, ctx) {
-    _classCallCheck(this, Bricks);
-
-    this.canvas = canvas;
-    this.ctx = ctx;
-    this.brickGrid = [];
-    this.rowCount = 5;
-    this.columnCount = 7;
-    this.width = 70;
-    this.height = 20;
-    this.padding = 10;
-    this.offsetTop = 30;
-    this.offsetLeft = 30;
-  }
-
-  _createClass(Bricks, [{
-    key: "createBricks",
-    value: function createBricks() {
-      for (var row = 0; row < this.columnCount; row++) {
-        this.brickGrid[row] = [];
-        for (var col = 0; col < this.rowCount; col++) {
-          var color = this._selectColor();
-          this.brickGrid[row][col] = { x: 0, y: 0, color: color, destroyed: false };
-        }
-      }
-    }
-  }, {
-    key: "draw",
-    value: function draw() {
-      var _this = this;
-
-      this.brickGrid.forEach(function (row, rowIndex) {
-        row.forEach(function (brick, colIndex) {
-          if (!brick.destroyed) {
-            _this._drawBrick(brick, rowIndex, colIndex);
-          }
-        });
-      });
-    }
-  }, {
-    key: "_drawBrick",
-    value: function _drawBrick(brick, rowIndex, colIndex) {
-      brick.x = rowIndex * (this.width + this.padding) + this.offsetLeft;
-      brick.y = colIndex * (this.height + this.padding) + this.offsetTop;
-      this.ctx.beginPath();
-      this.ctx.rect(brick.x, brick.y, this.width, this.height);
-      this.ctx.fillStyle = brick.color;
-      this.ctx.fill();
-      this.ctx.closePath();
-    }
-  }, {
-    key: "_selectColor",
-    value: function _selectColor(rowIndex, colIndex) {
-      var lightBrown = "#c75d14";
-      var darkBrown = "#4b270f";
-      var gray = "#50554e";
-      var num = Math.random() * 100 + 1;
-      if (num > 45) {
-        return lightBrown;
-      } else if (num > 15) {
-        return darkBrown;
-      } else {
-        return gray;
-      }
-    }
-  }]);
-
-  return Bricks;
-}();
-
-module.exports = Bricks;
 
 /***/ }),
 /* 3 */
@@ -485,59 +461,88 @@ module.exports = Paddle;
 "use strict";
 
 
-var _game = __webpack_require__(0);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _game2 = _interopRequireDefault(_game);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var Bricks = function () {
+  function Bricks(canvas, ctx) {
+    _classCallCheck(this, Bricks);
 
-var game = new _game2.default();
-var startButton = $('#start-button');
-var resumeButton = $('#resume-button');
-var restartButton = $('#restart-button');
-
-startButton.show();
-
-function startGame() {
-  game.setupCanvas();
-  game.bricks.createBricks();
-  game.draw();
-  $('#start-button').remove();
-}
-
-function pauseGame() {
-  if ($('#start-button').text()) {
-    return null;
-  } else {
-    game.status = 'paused';
-    resumeButton.show();
-    restartButton.show();
+    this.canvas = canvas;
+    this.ctx = ctx;
+    this.brickGrid = [];
+    this.rowCount = 5;
+    this.columnCount = 7;
+    this.width = 70;
+    this.height = 20;
+    this.padding = 10;
+    this.offsetTop = 30;
+    this.offsetLeft = 30;
   }
-}
 
-function resumeGame() {
-  $('#resume-button').hide();
-  $('#restart-button').hide();
-  game.status = 'active';
-  game.draw();
-}
+  _createClass(Bricks, [{
+    key: "createBricks",
+    value: function createBricks() {
+      for (var row = 0; row < this.columnCount; row++) {
+        this.brickGrid[row] = [];
+        for (var col = 0; col < this.rowCount; col++) {
+          var color = this._selectColor();
+          this.brickGrid[row][col] = { x: 0, y: 0, color: color, destroyed: false };
+        }
+      }
+    }
+  }, {
+    key: "draw",
+    value: function draw() {
+      var _this = this;
 
-function restartGame() {
-  $('#resume-button').hide();
-  $('#restart-button').hide();
-  $('#victory-msg').hide();
-  $('#gameover-msg').hide();
-  $(document).keypress(pauseGame);
-  game = new _game2.default();
-  game.setupCanvas();
-  game.bricks.createBricks();
-  game.draw();
-}
+      this.brickGrid.forEach(function (row, rowIndex) {
+        row.forEach(function (brick, colIndex) {
+          if (!brick.destroyed) {
+            _this._drawBrick(brick, rowIndex, colIndex);
+          }
+        });
+      });
+    }
+  }, {
+    key: "_drawBrick",
+    value: function _drawBrick(brick, rowIndex, colIndex) {
+      brick.x = rowIndex * (this.width + this.padding) + this.offsetLeft;
+      brick.y = colIndex * (this.height + this.padding) + this.offsetTop;
+      this.ctx.beginPath();
+      this.ctx.rect(brick.x, brick.y, this.width, this.height);
+      this.ctx.fillStyle = brick.color;
+      this.ctx.fill();
+      this.ctx.closePath();
+    }
+  }, {
+    key: "_selectColor",
+    value: function _selectColor(rowIndex, colIndex) {
+      var lightBrown = "#c75d14";
+      var darkBrown = "#4b270f";
+      var gray = "#50554e";
+      var num = Math.random() * 100 + 1;
+      if (num > 45) {
+        return lightBrown;
+      } else if (num > 15) {
+        return darkBrown;
+      } else {
+        return gray;
+      }
+    }
+  }]);
 
-startButton.click(startGame);
-resumeButton.click(resumeGame);
-restartButton.click(restartGame);
-$(document).keypress(pauseGame);
+  return Bricks;
+}();
+
+module.exports = Bricks;
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
