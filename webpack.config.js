@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const ExtractTextWebpackPlugin = require('extract-text-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssets = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
   entry: './app/start.js',
@@ -44,3 +46,10 @@ module.exports = {
     open: true // open default browser while launching
   }
 };
+
+if (process.env.NODE_ENV == 'production') {
+  module.exports.plugins.push(
+    new webpack.optimize.UglifyJsPlugin(),
+    new OptimizeCSSAssets()
+  )
+}
