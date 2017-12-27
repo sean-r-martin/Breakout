@@ -2,11 +2,10 @@ $lightbrown: #c75d14;
 $darkbrown: #4b270f;
 $gray: #50554e;
 $sunset-orange: #da680f;
-// $sunset-orange: #ffffff;
 
 html {
   box-sizing: border-box;
-  background-image: url("./img/brick-wall.jpg");
+  background-image: url("../img/brick-wall.jpg");
   font-family: 'Wallpoet', cursive;
 }
 
@@ -28,7 +27,7 @@ body {
 }
 
 canvas {
-  background-image: url("./img/old-wall.jpg");
+  background-image: url("../img/old-wall.jpg");
   display: block;
   margin: 0 auto;
 }

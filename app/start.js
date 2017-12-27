@@ -1,5 +1,5 @@
 'use strict';
-require('../src/style.scss');
+require('../src/css/style.scss');
 
 import Game from './game.js';
 let game = new Game();

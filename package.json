@@ -7,9 +7,8 @@
     "test": "check-node-version --node '>= 6.7.0' && mocha --compilers js:babel-register app/**/*.test.js server/**/*.test.js",
     "test-watch": "check-node-version --node '>= 6.7.0' &&  mocha --compilers js:babel-register --watch app/**/*.test.js server/**/*.test.js",
     "start": "check-node-version --node '>= 6.7.0' && webpack-dev-server -d --hot --config webpack.config.js --watch",
-    "build": "check-node-version --node '>= 6.7.0' && webpack -w",
-    "start-ver2": "check-node-version --node '>= 6.7.0' && nodemon server/start.js",
-    "production": "NODE_ENV=production webpack"
+    "build": "check-node-version --node '>= 6.7.0' && webpack",
+    "production": "check-node-version --node '>= 6.7.0' && NODE_ENV=production webpack"
   },
   "repository": {
     "type": "git",
@@ -37,6 +36,7 @@
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "chai": "^4.1.2",
+    "css-hot-loader": "^1.3.5",
     "css-loader": "^0.28.7",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",

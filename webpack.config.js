@@ -14,30 +14,35 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components)/,
+        test: /\.js$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
-        options: {
-          presets: ['es2015','es2016','es2017']
-        }
       },{
         test: /\.scss$/,
-        use: ExtractTextWebpackPlugin.extract({
+        use: ['css-hot-loader'].concat(ExtractTextWebpackPlugin.extract({
           use: ['css-loader', 'sass-loader'],
           fallback: 'style-loader'
-        })
+        }))
+      },{
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
       },{
         test: /\.(png|jpg|gif)$/,
         use: [
           {
-            loader: 'file-loader'
+            loader: 'file-loader',
+            options: {
+              publicPath: '../',
+              outputPath: 'img/'
+            }
           }
         ]
       }
     ]
   },
   plugins: [
-    new ExtractTextWebpackPlugin('./style.css')
+    new ExtractTextWebpackPlugin('./css/style.css')
   ],
   devServer: {
     contentBase: path.resolve(__dirname, './docs'), // A directory or URL to serve HTML content from
